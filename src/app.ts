@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { UserRouters } from './app/modules/user/user.route';
 
 dotenv.config();
 
@@ -11,6 +12,8 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+app.use("/api/user", UserRouters)
 
 // Test route
 app.get('/', (req, res) => {
