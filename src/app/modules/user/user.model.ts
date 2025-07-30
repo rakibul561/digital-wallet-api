@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcrypt";
-import { IUser, Role, Status } from "./user.interface"; // enum & interface import করবে
+import { IUser, Role, Status } from "./user.interface"; 
 
 
 // User Schema
@@ -19,7 +19,7 @@ const userSchema = new Schema<IUser>(
     },
     phone: {
       type: String,
-      default: "01932658062"
+      default: ""
     },
     password: {
       type: String,

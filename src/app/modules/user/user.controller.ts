@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
 import { sendResponse } from "../../../utils/sendRespone";
+import { catchAsync } from "../../../utils/catchAysnc";
 
 
  
@@ -18,9 +19,25 @@ import { sendResponse } from "../../../utils/sendRespone";
         data: user,
     })
 
- } 
+ }  
+
+
+ export  const getAllUsers = catchAsync(async (req:Request,res:Response) =>{
+   const result = await UserService.getAllUsers();
+
+
+    sendResponse(res, {
+        success: true,
+        statusCode: 201,
+        message: "  All Users Successfully",
+        data: result,
+    })
+
+
+ })
 
 
  export const UserController = {
-    createUser
+    createUser,
+    getAllUsers
  }

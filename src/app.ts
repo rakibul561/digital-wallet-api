@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { UserRouters } from './app/modules/user/user.route';
+import { globalErrorHandaler } from './app/middleware/globalErrorHandaler';
+import notFound from './app/middleware/notFound';
 
 dotenv.config();
 
@@ -31,3 +33,8 @@ mongoose.connect(process.env.MONGODB_URI!)
   .catch((error) => {
     console.error('Database connection failed:', error);
   });
+
+
+app.use(globalErrorHandaler)
+
+app.use(notFound)
