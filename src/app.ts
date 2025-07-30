@@ -5,6 +5,7 @@ import cors from 'cors';
 import { UserRouters } from './app/modules/user/user.route';
 import { globalErrorHandaler } from './app/middleware/globalErrorHandaler';
 import notFound from './app/middleware/notFound';
+import { AuthRouters } from './app/modules/auth/auth.route';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/user", UserRouters)
+app.use('/api/auth', AuthRouters)
 
 // Test route
 app.get('/', (req, res) => {
