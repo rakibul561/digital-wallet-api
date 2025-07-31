@@ -1,10 +1,11 @@
+import { envVars } from "../../../config/env";
 import { Wallet } from "../wallet/wallet.model";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
 import  bcrypt  from 'bcrypt';
 
 const createUserDb = async (payload: IUser) => {
-  payload.password = await bcrypt.hash(payload.password, 10)
+  payload.password = await bcrypt.hash(payload.password, envVars.BCRYPT_SALT_ROUND)
   const user = await User.create(payload);
 
   

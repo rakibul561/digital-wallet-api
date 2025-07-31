@@ -6,6 +6,8 @@ import { UserRouters } from './app/modules/user/user.route';
 import { globalErrorHandaler } from './app/middleware/globalErrorHandaler';
 import notFound from './app/middleware/notFound';
 import { AuthRouters } from './app/modules/auth/auth.route';
+import { router } from './app/routes';
+import { envVars } from './config/env';
 
 dotenv.config();
 
@@ -16,20 +18,19 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/user", UserRouters)
-app.use('/api/auth', AuthRouters)
+app.use("/api", router )
 
-// Test route
+
 app.get('/', (req, res) => {
   res.json({ message: 'Digital Wallet API is running!' });
 });
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI!)
+mongoose.connect(envVars.DB_URL)
   .then(() => {
     console.log('MongoDB connected successfully');
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`Server running on port ${envVars.PORT}`);
     });
   })
   .catch((error) => {
