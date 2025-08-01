@@ -1,7 +1,10 @@
 import { Request, Response } from "express"
-import { WalletServices } from "./wallet.service"
+import { WalletServices, walletUpdated } from "./wallet.service"
 import { sendResponse } from "../../../utils/sendRespone"
 import { catchAsync } from "../../../utils/catchAysnc"
+import { Wallet } from "./wallet.model"
+import { JwtPayload } from "jsonwebtoken"
+import httpStatus  from 'http-status-codes';
 
  
 
@@ -43,8 +46,22 @@ export const createWallet = async (req:Request, res:Response) =>{
     })
 
 
- })
+ }) 
 
+export const updateWallets = catchAsync(async (req: Request, res: Response) => {
+  const walletId = req.params.walletId;
+  const verifiedToken = (req as any).user as JwtPayload;
+  const payload = req.body;
+
+  const updatedWallet = await walletUpdated(walletId, payload, verifiedToken);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Wallet updated successfully",
+    data: updatedWallet,
+  });
+});
 
   
 
@@ -52,5 +69,6 @@ export const createWallet = async (req:Request, res:Response) =>{
 export const WalletController = {
     createWallet,
     getAllWallet,
-    getSingleWallet
+    getSingleWallet,
+    updateWallets
 }

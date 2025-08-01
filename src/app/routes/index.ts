@@ -3,6 +3,7 @@
 import { UserRouters } from "../modules/user/user.route";
 import { AuthRouters } from "../modules/auth/auth.route";
 import { WalletRouters } from "../modules/wallet/wallet.route";
+import { TransactionRouters } from "../modules/transaction/transaction.route";
 
 
  export const router = express.Router();
@@ -20,6 +21,10 @@ import { WalletRouters } from "../modules/wallet/wallet.route";
     {
         path:"/wallets",
         route: WalletRouters
+    },
+    {
+        path:"/transaction",
+        route: TransactionRouters
     },
 
  ]

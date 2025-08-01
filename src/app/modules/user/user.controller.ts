@@ -8,7 +8,7 @@ import { catchAsync } from "../../../utils/catchAysnc";
 
  
 
- export const createUser = async (req:Request,res:Response) =>{
+ const createUser = async (req:Request,res:Response) =>{
      
     const user = await UserService.createUserDb(req.body)
 
@@ -22,7 +22,7 @@ import { catchAsync } from "../../../utils/catchAysnc";
  }  
 
 
- export  const getAllUsers = catchAsync(async (req:Request,res:Response) =>{
+ const getAllUsers = catchAsync(async (req:Request,res:Response) =>{
    const result = await UserService.getAllUsers();
 
 
