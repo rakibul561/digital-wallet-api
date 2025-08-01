@@ -5,7 +5,7 @@ import { User } from "./user.model";
 import  bcrypt  from 'bcrypt';
 
 const createUserDb = async (payload: IUser) => {
-  payload.password = await bcrypt.hash(payload.password, envVars.BCRYPT_SALT_ROUND)
+  payload.password = await bcrypt.hash(payload.password, 10)
   const user = await User.create(payload);
 
   
