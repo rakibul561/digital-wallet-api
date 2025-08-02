@@ -58,15 +58,41 @@ import { TransactionService } from "./transaction.service";
 
 
 
+ 
+ const cashIn = catchAsync(async (req:Request, res:Response) =>{
+  
+
+   const agentId = (req as any).user.agentId;
+   const {amount, userId} = req.body;
 
 
- const cashIn = () =>{
+   const result = await TransactionService.cashInDB(agentId,userId, amount)
+     sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: " cash in successfully",
+      data: result,
+    });
 
- }
+ })
+ const cashOut = catchAsync(async (req:Request, res:Response) =>{
+  
 
- const cashOut = () =>{
+   const agentId = (req as any).user.agentId;
+   const {amount, userId} = req.body;
 
- }
+
+   const result = await TransactionService.cashInDB(agentId,userId, amount)
+     sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: " cash out  successfully",
+      data: result,
+    });
+
+ })
+
+
 
  const getMyTransaction = () =>{
 

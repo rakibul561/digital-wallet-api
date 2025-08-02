@@ -11,6 +11,9 @@ const router = express.Router()
 router.post("/add-money",checkAuth(Role.USER),TransactionController.addMoney)
 router.post("/withdraw",checkAuth(Role.USER),TransactionController.withdraw)
 router.post("/send-money",checkAuth(Role.USER),TransactionController.sendMoney)
+router.post("/cash-in",checkAuth(Role.AGENT),TransactionController.cashIn)
+router.post("/cash-in",checkAuth(Role.AGENT),TransactionController.cashIn)
+router.post("/cash-out",checkAuth(Role.AGENT),TransactionController.cashOut)
 
 
 

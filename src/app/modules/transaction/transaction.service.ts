@@ -23,7 +23,7 @@ const addMoneyDB = async (userId: string, amount: number) => {
     type: TransactionType.ADD_MONEY,
     amount,
     walletId: wallet._id,
-    userId
+    senderId: userId
   });
 
   return wallet;
@@ -86,16 +86,47 @@ const sendMoneyDB = async (senderId: string,receiverId:string, amount: number) =
 
 
 
+const cashInDB = async (agentId:string,userId: string, amount: number) => {
 
+  const userWallet = await Wallet.findOne({ userId });
+  if (!userWallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
+  }
+   userWallet.balance = Number(userWallet.balance) + Number(amount);
+  
+  await userWallet.save();
 
+  await Transaction.create({
+    type: TransactionType.CASH_IN,
+    amount,
+    walletId: userWallet._id,
+     agentId,
+    userId
+  });
 
+  return userWallet;
+}
+const cashOutDB = async (agentId:string,userId: string, amount: number) => {
 
- const cashInDB = () =>{
+  const userWallet = await Wallet.findOne({ userId });
+  if (!userWallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
+  }
+   userWallet.balance = Number(userWallet.balance) - Number(amount);
+  
+  await userWallet.save();
 
- } 
- const cashOutDB = () =>{
+  await Transaction.create({
+    type: TransactionType.CASH_OUT,
+    amount,
+    walletId: userWallet._id,
+     agentId,
+    userId
+  });
 
- } 
+  return userWallet;
+}
+
  const getMyTransactionsDb = () =>{
 
  } 
