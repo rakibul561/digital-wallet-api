@@ -147,7 +147,7 @@ src/
 
 ### Base URL
 ```
-http://localhost:5000/api/
+https://digital-wallet-api-six.vercel.app/api
 ```
 
 ### Authentication Endpoints
