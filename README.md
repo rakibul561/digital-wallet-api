@@ -163,7 +163,7 @@ http://localhost:5000/api/
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|---------|
 | GET | `/user` | Get all users | Admin |
-| PATCH | `/user/:id` | Block user account | Admin |
+
 
 
 ### Wallet Endpoints
@@ -171,8 +171,8 @@ http://localhost:5000/api/
 | Method | Endpoint | Description | Access |
 |--------|----------|-------------|---------|
 | GET | `/wallets` | Get my wallet | User/Agent |
-| GET | `/wallets/:id` | Get wallet by ID | User/Agent/Admin |
-|PATCH | `/wallets/:id` | Get wallet by ID and updat7e | Admin |
+| GET | `/wallets/me:id` | Get wallet by ID | User/Agent/Admin |
+|PATCH | `/wallets/block:id` | Get wallet by ID and update | Admin |
 
 
 ### Transaction Endpoints
