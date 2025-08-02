@@ -177,15 +177,16 @@ http://localhost:5000/api/
 
 ### Transaction Endpoints
 
-1| Method | Endpoint | Description | Access |
+| Method | Endpoint | Description | Access |
 |--------|----------|-------------|---------|
 | GET | `/transactions/me` | Get my wallet | User/Agent |
-| GET | `/transactions` | Get All wallet  | Admin |
+| GET | `/transactions` | Get All wallet | Admin |
 | POST | `/transactions/add-money` | Add money to wallet | User |
 | POST | `/transactions/withdraw` | Withdraw from wallet | User |
 | POST | `/transactions/send-money` | Send money to user | User |
 | POST | `/transactions/cash-in` | Cash-in to user wallet | Agent |
 | POST | `/transactions/cash-out` | Cash-out from user wallet | Agent |
+POST | `/transactions/cash-out` | Cash-out from user wallet | Agent |
 
 ## 🔒 Security Features
 
