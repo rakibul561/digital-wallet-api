@@ -15,7 +15,7 @@ router.post("/cash-in",checkAuth(Role.AGENT),TransactionController.cashIn)
 router.post("/cash-in",checkAuth(Role.AGENT),TransactionController.cashIn)
 router.post("/cash-out",checkAuth(Role.AGENT),TransactionController.cashOut)
 
-router.get("/me",checkAuth(Role.USER),TransactionController.getMyTransaction)
+router.get("/me",checkAuth(Role.USER, Role.AGENT),TransactionController.getMyTransaction)
 router.get("/",checkAuth(Role.ADMIN),TransactionController.getAllTransaction)
 
 

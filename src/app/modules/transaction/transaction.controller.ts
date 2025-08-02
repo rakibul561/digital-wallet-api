@@ -93,20 +93,27 @@ import { TransactionService } from "./transaction.service";
 
 
 
-  const getMyTransaction = catchAsync(async(req:Request, res:Response) =>{
-      
-    const userId = (req as any).user.userId;
+  const getMyTransaction = catchAsync(async (req: Request, res: Response) => {
+  const userId = (req as any).user.userId;
 
-    const result = await TransactionService.getMyTransactionsDb(userId)
-     sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Your transactions fetched successfully",
-      data: result,
-    });
+ 
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const sort = (req.query.sort as string) || "-createdAt";
 
-    
-  })
+  
+  const result = await TransactionService.getMyTransactionsDb(userId, page, limit, sort);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Your transactions fetched successfully",
+    data: result,
+  });
+});
+
+
+
   const getAllTransaction = catchAsync(async(req:Request, res:Response) =>{
       const userId = (req as any).user.userId;
       
