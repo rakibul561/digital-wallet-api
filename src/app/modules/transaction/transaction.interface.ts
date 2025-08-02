@@ -16,5 +16,6 @@ export interface ITransaction {
   senderId?: Types.ObjectId;
   receiverId?: Types.ObjectId;
   agentId?: Types.ObjectId;
+ 
   
 }

@@ -24,13 +24,13 @@ import { generateToken } from "../../../utils/jwt";
 
 
    const jwtPayload = {
+     userId: isUserExist._id,
      email:payload.email,
      role: isUserExist.role
    }
     
      const accessToken = generateToken(jwtPayload, envVars.JWT_ACCESS_SECRET, envVars.JWT_ACCESS_EXPIRES)
 
-   
 
     return accessToken
  } 

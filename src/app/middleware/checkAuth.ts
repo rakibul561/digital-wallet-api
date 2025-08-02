@@ -22,7 +22,8 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
 
         const verifiedToken = verifyToken(token, envVars.JWT_ACCESS_SECRET) as JwtPayload;
 
-    
+      console.log("verifiedToken:", verifiedToken);
+
 
         const isUserExist = await User.findOne({ email: verifiedToken.email });
 
@@ -41,7 +42,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
 
     
         (req as any).user = verifiedToken;
-
+       
         next();
 
     } catch (error) {

@@ -23,7 +23,7 @@ import { TransactionRouters } from "../modules/transaction/transaction.route";
         route: WalletRouters
     },
     {
-        path:"/transaction",
+        path:"/transactions",
         route: TransactionRouters
     },
 
