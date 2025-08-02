@@ -16,16 +16,20 @@ export const createWalletDB = async (payload: IWallet) => {
   return data;
 };
 
+
 const getAllWalletsDB = async () => {
   const wallets = await Wallet.find({});
 
   return wallets;
 };
 
+
+
 const getSingleWalletsDB = async (payload: string) => {
   const data = await Wallet.findById(payload);
   return data;
 };
+
 
 export const walletUpdated = async (
   walletId: string,

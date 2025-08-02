@@ -10,6 +10,9 @@ const addMoneyDB = async (userId: string, amount: number) => {
   if (!wallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Wallet not Found");
   }
+  if (wallet?.status === "BLOCKED") {
+    throw new Error("Wallet is blocked. Cannot add money.");
+  }
 
   wallet.balance = Number(wallet.balance) + Number(amount);
 
@@ -29,6 +32,9 @@ const withdrawDB = async (userId: string, amount: number) => {
 
   if (!wallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Wallet not Found");
+  }
+  if (wallet?.status === "BLOCKED") {
+    throw new Error("Wallet is blocked. Cannot withdraw money.");
   }
 
   if (wallet.balance < amount) {
@@ -57,11 +63,21 @@ const sendMoneyDB = async (
   const senderWallet = await Wallet.findOne({ userId: senderId });
   const receiverWallet = await Wallet.findOne({ userId: receiverId });
 
+
+  
+
   if (!senderWallet || !receiverWallet)
     throw new AppError(
       httpStatus.NOT_FOUND,
       "Sender or receiver wallet not found"
     );
+
+
+    if (senderWallet?.status === "BLOCKED" || receiverWallet?.status === "BLOCKED") {
+    throw new Error("Wallet is blocked. Cannot send money.");
+  }
+
+
   if (senderWallet.balance < amount)
     throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance");
 
@@ -87,6 +103,11 @@ const cashInDB = async (agentId: string, userId: string, amount: number) => {
   if (!userWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
   }
+   
+ if (userWallet?.status === "BLOCKED") {
+    throw new Error("Wallet is blocked. Cannot add money.");
+  }
+
   if (userWallet.balance < amount) {
     throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance");
   }
@@ -111,6 +132,12 @@ const cashOutDB = async (agentId: string, userId: string, amount: number) => {
   if (!userWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
   }
+  
+  if (userWallet?.status === "BLOCKED") {
+    throw new Error("Wallet is blocked. Cannot add money.");
+  }
+
+
   userWallet.balance = Number(userWallet.balance) - Number(amount);
 
   await userWallet.save();
