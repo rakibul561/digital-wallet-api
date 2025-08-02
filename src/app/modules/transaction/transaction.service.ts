@@ -106,6 +106,9 @@ const cashInDB = async (agentId:string,userId: string, amount: number) => {
 
   return userWallet;
 }
+
+
+
 const cashOutDB = async (agentId:string,userId: string, amount: number) => {
 
   const userWallet = await Wallet.findOne({ userId });
@@ -127,12 +130,27 @@ const cashOutDB = async (agentId:string,userId: string, amount: number) => {
   return userWallet;
 }
 
- const getMyTransactionsDb = () =>{
+
+ const getMyTransactionsDb = async (userId: string) =>{
+
+
+  const allTransaction = await Transaction.find({ 
+    $or: [{userId}, {senderId:userId}, {receiverId:userId}]
+  }).sort({createdAt: -1})
+
+  return allTransaction
 
  } 
- const getAllTransactionDB = () =>{
+ const getAllTransactionDB = async (userId: string) =>{
+
+  
+  const allTransaction = await Transaction.find().populate("userId senderId receiverId agentId walletId")
+  
+
+  return allTransaction
 
  } 
+
   
 
 

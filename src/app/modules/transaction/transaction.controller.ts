@@ -56,8 +56,6 @@ import { TransactionService } from "./transaction.service";
 
  })
 
-
-
  
  const cashIn = catchAsync(async (req:Request, res:Response) =>{
   
@@ -75,6 +73,7 @@ import { TransactionService } from "./transaction.service";
     });
 
  })
+
  const cashOut = catchAsync(async (req:Request, res:Response) =>{
   
 
@@ -82,7 +81,7 @@ import { TransactionService } from "./transaction.service";
    const {amount, userId} = req.body;
 
 
-   const result = await TransactionService.cashInDB(agentId,userId, amount)
+   const result = await TransactionService.cashOutDB(agentId,userId, amount)
      sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
@@ -94,12 +93,35 @@ import { TransactionService } from "./transaction.service";
 
 
 
- const getMyTransaction = () =>{
+  const getMyTransaction = catchAsync(async(req:Request, res:Response) =>{
+      
+    const userId = (req as any).user.userId;
 
- }
- const getAllTransaction = () =>{
+    const result = await TransactionService.getMyTransactionsDb(userId)
+     sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Your transactions fetched successfully",
+      data: result,
+    });
 
- }
+    
+  })
+  const getAllTransaction = catchAsync(async(req:Request, res:Response) =>{
+      const userId = (req as any).user.userId;
+      
+   const result = await TransactionService.getAllTransactionDB(userId);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "All transactions fetched successfully",
+      data: result,
+    });
+
+    
+  })
+
+  
  export const TransactionController = {
     addMoney,
     withdraw,
