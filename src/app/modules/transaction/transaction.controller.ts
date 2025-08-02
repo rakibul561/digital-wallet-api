@@ -9,7 +9,6 @@ import { TransactionService } from "./transaction.service";
 
  const addMoney = catchAsync(async (req:Request, res:Response) =>{
   
-    console.log("the user is ", (req as any).user)
 
    const userId = (req as any).user.userId;
    const amount = req.body.amount;
@@ -25,13 +24,41 @@ import { TransactionService } from "./transaction.service";
 
  })
 
+  const withdraw = catchAsync(async (req:Request, res:Response) =>{
+  
 
- const withdraw = () =>{
+   const userId = (req as any).user.userId;
+   const amount = req.body.amount;
 
- }
- const sendMoney = () =>{
 
- }
+   const result = await TransactionService.withdrawDB(userId, amount)
+     sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: " withdraw money successfully",
+      data: result,
+    });
+
+ })
+  const sendMoney = catchAsync(async (req:Request, res:Response) =>{
+  
+     const userId = (req as any).user.userId;
+    const { receiverId, amount } = req.body;
+
+   const result = await TransactionService.sendMoneyDB(userId, receiverId, amount)
+
+     sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: " send  money successfully",
+      data: result,
+    });
+
+ })
+
+
+
+
 
  const cashIn = () =>{
 

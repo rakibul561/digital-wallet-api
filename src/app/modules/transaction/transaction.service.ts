@@ -6,12 +6,9 @@ import { TransactionType } from "./transaction.interface"
  
 
 const addMoneyDB = async (userId: string, amount: number) => {
-  // Add debugging to see what we're searching for
-  console.log("Searching for wallet with userId:", userId);
-  console.log("Amount to add:", amount);
-  
+
   const wallet = await Wallet.findOne({ userId });
-  console.log("Found wallet:", wallet);
+
   
   if (!wallet) {
     throw new AppError(httpStatus.NOT_FOUND, "Wallet not Found");
@@ -19,10 +16,9 @@ const addMoneyDB = async (userId: string, amount: number) => {
 
    wallet.balance = Number(wallet.balance) + Number(amount);
   
-  // IMPORTANT: Save the updated wallet to database
   await wallet.save();
 
-  // Create transaction record
+  
   await Transaction.create({
     type: TransactionType.ADD_MONEY,
     amount,
@@ -30,8 +26,62 @@ const addMoneyDB = async (userId: string, amount: number) => {
     userId
   });
 
-  console.log("Updated wallet balance:", wallet.balance);
   return wallet;
+}
+const withdrawDB = async (userId: string, amount: number) => {
+
+  const wallet = await Wallet.findOne({ userId });
+
+  
+  if (!wallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "Wallet not Found");
+  }
+
+  if(wallet.balance < amount) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance")
+  }
+
+   wallet.balance = Number(wallet.balance) - Number(amount);
+  
+  await wallet.save();
+
+  
+  await Transaction.create({
+    type: TransactionType.WITHDRAW,
+    amount,
+    walletId: wallet._id,
+    userId
+  });
+
+  return wallet;
+}
+
+const sendMoneyDB = async (senderId: string,receiverId:string, amount: number) => {
+
+ const senderWallet = await Wallet.findOne({ userId: senderId });
+    const receiverWallet = await Wallet.findOne({ userId: receiverId });
+
+    if (!senderWallet || !receiverWallet)
+      throw new AppError(httpStatus.NOT_FOUND, "Sender or receiver wallet not found");
+    if (senderWallet.balance < amount)
+      throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance");
+
+    senderWallet.balance = Number(senderWallet.balance) - Number(amount)
+    receiverWallet.balance = Number(receiverWallet.balance) + Number(amount)
+    
+
+    await senderWallet.save();
+    await receiverWallet.save();
+
+     await Transaction.create({
+      type: TransactionType.SEND_MONEY,
+      amount,
+      walletId: senderWallet._id,
+      senderId,
+      receiverId,
+    });
+
+  return receiverWallet;
 }
 
 
@@ -40,12 +90,6 @@ const addMoneyDB = async (userId: string, amount: number) => {
 
 
 
- const withdrawDB = () =>{
-
- } 
- const sendMoneyDB = () =>{
-
- } 
  const cashInDB = () =>{
 
  } 
