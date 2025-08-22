@@ -8,6 +8,7 @@ import notFound from './app/middleware/notFound';
 import { AuthRouters } from './app/modules/auth/auth.route';
 import { router } from './app/routes';
 import { envVars } from './config/env';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 
 app.use("/api", router )
 

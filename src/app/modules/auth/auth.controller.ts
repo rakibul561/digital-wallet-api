@@ -7,13 +7,28 @@ import { AuthServices } from "./auth.service";
  
  export const userLogin = async (req:Request,res:Response) =>{
      
-    const user = await AuthServices.loginUser(req.body)
+    const data = await AuthServices.loginUser(req.body)
+
+   res.cookie("accessToken", data.accessToken, {
+     secure: true,
+     httpOnly: true,
+     sameSite: "lax",
+  });
+
+
+  res.cookie('refreshToken', data.refreshToken, {
+    secure:true,
+    httpOnly: true,
+  });
+
+
+
 
     sendResponse(res, {
         success: true,
         statusCode: 201,
         message: "User Login Successfully",
-        data: user,
+        data,
     })
 
  }  

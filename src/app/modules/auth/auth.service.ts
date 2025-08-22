@@ -4,7 +4,7 @@ import AppError from "../../errorHelpers/AppError";
 import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import  bcrypt  from 'bcrypt';
-import  Jwt  from "jsonwebtoken";
+import  Jwt, { SignOptions }  from "jsonwebtoken";
 import { envVars } from "../../../config/env";
 import { generateToken } from "../../../utils/jwt";
  
@@ -30,9 +30,19 @@ import { generateToken } from "../../../utils/jwt";
    }
     
      const accessToken = generateToken(jwtPayload, envVars.JWT_ACCESS_SECRET, envVars.JWT_ACCESS_EXPIRES)
+        
 
-
-    return accessToken
+      const refreshToken = Jwt.sign(
+    jwtPayload,
+    envVars.JWT_REFRESH_SECRET as string,
+    { expiresIn: envVars.JWT_REFRESH_EXPIRES } as SignOptions
+  );
+ 
+   
+    return {
+      accessToken,
+      refreshToken
+    }
  } 
 
  
