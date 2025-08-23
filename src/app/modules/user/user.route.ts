@@ -9,6 +9,6 @@ import { Role } from './user.interface'
    
   router.post("/register", validateRequest(userZodSchema.userCreateZodSchema), UserController.createUser)
   router.get("/", checkAuth(Role.ADMIN), UserController.getAllUsers)
-
+  router.get("/me", checkAuth(...Object.values(Role)), UserController.getSingleUsers)
 
   export const  UserRouters = router

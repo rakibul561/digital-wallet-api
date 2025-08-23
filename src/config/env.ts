@@ -5,6 +5,7 @@ dotenv.config()
 interface EnvConfig {
     PORT: string,
     DB_URL: string,
+    NODE_ENV:string,
     JWT_ACCESS_SECRET:string,
     BCRYPT_SALT_ROUND:string,
     JWT_ACCESS_EXPIRES:string,
@@ -14,7 +15,7 @@ interface EnvConfig {
 }
 
 const loadEnvVariables = (): EnvConfig => {
-    const requiredEnvVariables: string[] = ["PORT", "DB_URL", "JWT_ACCESS_SECRET", "BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_REFRESH_SECRET","JWT_REFRESH_EXPIRES" ];
+    const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV", "JWT_ACCESS_SECRET", "BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_REFRESH_SECRET","JWT_REFRESH_EXPIRES" ];
 
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
@@ -26,6 +27,7 @@ const loadEnvVariables = (): EnvConfig => {
         PORT: process.env.PORT as string,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         DB_URL: process.env.DB_URL!,
+        NODE_ENV:process.env.NODE_ENV!,
         JWT_ACCESS_SECRET:process.env.JWT_ACCESS_SECRET as string ,
         BCRYPT_SALT_ROUND:process.env.BCRYPT_SALT_ROUND as string,
         JWT_ACCESS_EXPIRES:process.env.JWT_ACCESS_EXPIRES as string,

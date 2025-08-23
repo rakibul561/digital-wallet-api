@@ -36,8 +36,24 @@ import { catchAsync } from "../../../utils/catchAysnc";
 
  })
 
+ const getSingleUsers = catchAsync(async (req:Request,res:Response) =>{
+   const result = await UserService.getSingleUser();
+
+
+    sendResponse(res, {
+        success: true,
+        statusCode: 201,
+        message: "  Singlet Users Successfully",
+        data: result,
+    })
+
+
+ })
+
+
 
  export const UserController = {
     createUser,
-    getAllUsers
+    getAllUsers,
+    getSingleUsers
  }
