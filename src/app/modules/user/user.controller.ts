@@ -37,7 +37,7 @@ import { catchAsync } from "../../../utils/catchAysnc";
  })
 
  const getSingleUsers = catchAsync(async (req:Request,res:Response) =>{
-   const result = await UserService.getSingleUser();
+   const result = await UserService.SingleUser();
 
 
     sendResponse(res, {

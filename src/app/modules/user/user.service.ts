@@ -32,7 +32,7 @@ const getAllUsers = async () => {
 };
 
 
-const getSingleUser = async () =>{
+const SingleUser = async () =>{
   const result = await User.findOne({})
   return {
     data:result
@@ -45,5 +45,5 @@ const getSingleUser = async () =>{
 export const UserService = {
   createUserDb,
   getAllUsers,
-  getSingleUser
+  SingleUser
 };
