@@ -31,13 +31,13 @@ const getAllUsers = async () => {
     }
 };
 
+const SingleUser = async (userId: string) => {
+   const user = await User.findById(userId).select("-password");
+    return {
+        data: user
+    }
+};
 
-const SingleUser = async () =>{
-  const result = await User.findOne({})
-  return {
-    data:result
-  }
-}
 
 
 
