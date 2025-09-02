@@ -34,7 +34,7 @@ export const createWallet = async (req:Request, res:Response) =>{
 
  })
  export  const getSingleWallet = catchAsync(async (req:Request,res:Response) =>{
-     
+
      const walletId = req.params.walletId;
      const result = await WalletServices.getSingleWalletsDB(walletId)
 

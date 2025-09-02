@@ -28,7 +28,7 @@ const userSchema = new Schema<IUser>(
     },
     image: {
       type: String,
-      default: "user profile not found",
+      default: "https://i.ibb.co.com/4RcS7TwZ/smiling-young-man-illustration-1308-174669.jpg",
     },
     address: {
       type: String,

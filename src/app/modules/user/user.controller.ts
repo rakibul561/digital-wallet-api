@@ -37,10 +37,10 @@ import { JwtPayload } from "jsonwebtoken";
 
  })
 
- 
+// Controller
 const getSingleUsers = catchAsync(async (req: Request, res: Response) => {
-    const decodedToken = req.user!
-    const result = await UserService.SingleUser(decodedToken.userId);
+  const decodedToken = req.user!;
+  const result = await UserService.SingleUser(decodedToken.userId);
 
   sendResponse(res, {
     success: true,
@@ -51,10 +51,42 @@ const getSingleUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+const userUpdateProfile = catchAsync(async(req: Request, res: Response) =>{
+   const decodedToken = req.user!;
+   const payload = req.body;
+
+   const result = await UserService.userUpdateProfile(decodedToken.userId, payload)
+  
+     sendResponse(res, {
+    success: true,
+    statusCode: 201,
+    message: "User status updated successfully",
+    data:result
+  });
+})
+
+
+
+const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const { status } = req.body; 
+  const result = await UserService.updateUserStatus(userId, status);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: 201,
+    message: "User status updated successfully",
+    data: result,
+  });
+});
+
+
 
 
  export const UserController = {
     createUser,
     getAllUsers,
-    getSingleUsers
+    getSingleUsers,
+    updateUserStatus,
+    userUpdateProfile
  }

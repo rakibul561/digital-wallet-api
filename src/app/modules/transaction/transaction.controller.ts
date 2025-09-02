@@ -29,6 +29,8 @@ import { TransactionService } from "./transaction.service";
 
    const userId = (req as any).user.userId;
    const amount = req.body.amount;
+   console.log("REQ BODY ===>", req.body);
+
 
 
    const result = await TransactionService.withdrawDB(userId, amount)
@@ -40,6 +42,7 @@ import { TransactionService } from "./transaction.service";
     });
 
  })
+
   const sendMoney = catchAsync(async (req:Request, res:Response) =>{
   
      const userId = (req as any).user.userId;
