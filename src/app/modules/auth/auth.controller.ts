@@ -9,24 +9,24 @@ import { Wallet } from "../wallet/wallet.model";
 export const userLogin = async (req: Request, res: Response) => {
    const data = await AuthServices.loginUser(req.body);
 
-  // এখানে userId বের করা হলো (ধরে নিচ্ছি data.user._id বা data._id আসছে)
+  
   const userId = data?.user?._id || data?._id;
 
-  // wallet খুঁজে আনা userId দিয়ে
+
   const wallet = await Wallet.findOne({ userId });
 
-  // cookie সেট করা
-  res.cookie("accessToken", data.accessToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
+ res.cookie("accessToken", data.accessToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", 
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+});
 
-  res.cookie("refreshToken", data.refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
+res.cookie("refreshToken", data.refreshToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+});
+
 
   sendResponse(res, {
     success: true,

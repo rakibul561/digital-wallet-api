@@ -29,7 +29,7 @@ const checkAuth = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0
             ? accessToken.slice(7)
             : accessToken;
         const verifiedToken = (0, jwt_1.verifyToken)(token, env_1.envVars.JWT_ACCESS_SECRET);
-        console.log("verifiedToken:", verifiedToken);
+     
         const isUserExist = yield user_model_1.User.findOne({ email: verifiedToken.email });
         if (!isUserExist) {
             throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "User does not exist");

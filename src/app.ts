@@ -15,10 +15,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Middleware  use 
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173", 
+  origin: ["https://digital-wallet-psi.vercel.app",  "http://localhost:5173"] ,
   credentials: true,
   methods: ['GET', 'POST', 'PUT','PATCH','DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],

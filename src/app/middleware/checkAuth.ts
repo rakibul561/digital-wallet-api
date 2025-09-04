@@ -10,7 +10,7 @@ import { Status } from "../modules/user/user.interface";
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
         const accessToken = req.headers.authorization || req.cookies.accessToken;
-
+       
         if (!accessToken) {
             throw new AppError(httpStatus.UNAUTHORIZED, "No Token Received");
         }
@@ -22,7 +22,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
 
         const verifiedToken = verifyToken(token, envVars.JWT_ACCESS_SECRET) as JwtPayload;
 
-      console.log("verifiedToken:", verifiedToken);
+      
 
 
         const isUserExist = await User.findOne({ email: verifiedToken.email });
