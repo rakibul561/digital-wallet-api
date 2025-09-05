@@ -31,7 +31,43 @@ const getAllUsers = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+// Controller
+const getSingleUsers = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const result = yield user_service_1.UserService.SingleUser(decodedToken.userId);
+    (0, sendRespone_1.sendResponse)(res, {
+        success: true,
+        statusCode: 201,
+        message: "Single User Successfully",
+        data: result,
+    });
+}));
+const userUpdateProfile = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const payload = req.body;
+    const result = yield user_service_1.UserService.userUpdateProfile(decodedToken.userId, payload);
+    (0, sendRespone_1.sendResponse)(res, {
+        success: true,
+        statusCode: 201,
+        message: "User status updated successfully",
+        data: result
+    });
+}));
+const updateUserStatus = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const { status } = req.body;
+    const result = yield user_service_1.UserService.updateUserStatus(userId, status);
+    (0, sendRespone_1.sendResponse)(res, {
+        success: true,
+        statusCode: 201,
+        message: "User status updated successfully",
+        data: result,
+    });
+}));
 exports.UserController = {
     createUser,
-    getAllUsers
+    getAllUsers,
+    getSingleUsers,
+    updateUserStatus,
+    userUpdateProfile
 };

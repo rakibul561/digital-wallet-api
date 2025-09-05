@@ -19,13 +19,15 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const createUserDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     payload.password = yield bcrypt_1.default.hash(payload.password, 10);
     const user = yield user_model_1.User.create(payload);
-    yield wallet_model_1.Wallet.create({
+    // wallet create
+    const wallet = yield wallet_model_1.Wallet.create({
         userId: user._id,
         balance: 50,
+        status: "ACTIVE",
     });
-    return user;
+    // return user + walletId
+    return Object.assign(Object.assign({}, user.toObject()), { walletId: wallet._id });
 });
-// get all user 
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_model_1.User.find({});
     const totalUsers = yield user_model_1.User.countDocuments();
@@ -36,7 +38,44 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
         data: users,
     };
 });
+const SingleUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(userId).select("-password").lean();
+    const wallet = yield wallet_model_1.Wallet.findOne({ userId });
+    return Object.assign(Object.assign({}, user), { walletId: wallet === null || wallet === void 0 ? void 0 : wallet._id });
+});
+const userUpdateProfile = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, phone, oldPassword, newPassword } = payload;
+    const user = yield user_model_1.User.findById(userId);
+    if (!user) {
+        throw new Error("user not found");
+    }
+    if (name)
+        user.name = name;
+    if (phone)
+        user.phone = phone;
+    if (oldPassword && newPassword) {
+        const isMatch = yield bcrypt_1.default.compare(oldPassword, user.password);
+        if (!isMatch) {
+            throw new Error("old password is Incorect");
+        }
+        user.password = yield bcrypt_1.default.hash(newPassword, 10);
+    }
+    yield user.save();
+    return user;
+});
+const updateUserStatus = (userId, status) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(userId);
+    if (!user) {
+        throw new Error("User not found");
+    }
+    user.status = status;
+    yield user.save();
+    return user;
+});
 exports.UserService = {
     createUserDb,
-    getAllUsers
+    getAllUsers,
+    SingleUser,
+    updateUserStatus,
+    userUpdateProfile,
 };

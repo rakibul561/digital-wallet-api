@@ -183,6 +183,17 @@ export const getMyTransactionsDb = async (
 };
 
 
+export const getAgentTransactionsDb = async (userId: string) => {
+  const query = {
+    $or: [{ userId }, { senderId: userId }, { receiverId: userId }],
+  };
+
+  const allTransaction = await Transaction.find(query).sort({ createdAt: -1 });
+
+  return allTransaction;
+};
+
+
 
 const getAllTransactionDB = async (userId: string) => {
   const allTransaction = await Transaction.find().populate(
@@ -200,4 +211,5 @@ export const TransactionService = {
   cashOutDB,
   getMyTransactionsDb,
   getAllTransactionDB,
+  getAgentTransactionsDb
 };

@@ -21,7 +21,7 @@ const user_model_1 = require("../modules/user/user.model");
 const user_interface_1 = require("../modules/user/user.interface");
 const checkAuth = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accessToken = req.headers.authorization;
+        const accessToken = req.headers.authorization || req.cookies.accessToken;
         if (!accessToken) {
             throw new AppError_1.default(http_status_codes_1.default.UNAUTHORIZED, "No Token Received");
         }
@@ -29,7 +29,6 @@ const checkAuth = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0
             ? accessToken.slice(7)
             : accessToken;
         const verifiedToken = (0, jwt_1.verifyToken)(token, env_1.envVars.JWT_ACCESS_SECRET);
-     
         const isUserExist = yield user_model_1.User.findOne({ email: verifiedToken.email });
         if (!isUserExist) {
             throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "User does not exist");

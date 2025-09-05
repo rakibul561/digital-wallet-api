@@ -10,14 +10,17 @@ export const userLogin = async (req: Request, res: Response) => {
   const data = await AuthServices.loginUser(req.body);
 
   const userId = data?.user?._id || data?._id;
-
+  console.log(userId)
+  
   const wallet = await Wallet.findOne({ userId });
 
  res.cookie("accessToken", data.accessToken, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // লোকালে false, deploy এ true
+  secure: process.env.NODE_ENV === "production", // local:false, prod:true
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 });
+
+
 res.cookie("refreshToken", data.refreshToken, {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",

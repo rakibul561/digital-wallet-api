@@ -11,12 +11,22 @@ const globalErrorHandaler_1 = require("./app/middleware/globalErrorHandaler");
 const notFound_1 = __importDefault(require("./app/middleware/notFound"));
 const routes_1 = require("./app/routes");
 const env_1 = require("./config/env");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
-// Middleware
+// Middleware  use 
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: [
+        "http://localhost:5173",
+        "https://digital-wallet-opal.vercel.app",
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.use((0, cookie_parser_1.default)());
 app.use("/api", routes_1.router);
 app.get('/', (req, res) => {
     res.json({ message: 'Digital Wallet API is running!' });

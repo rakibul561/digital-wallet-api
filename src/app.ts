@@ -17,12 +17,18 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware  use 
 app.use(express.json());
+
 app.use(cors({
-  origin: "https://digital-wallet-psi.vercel.app" ,
+  origin: [
+    "http://localhost:5173", 
+    "https://digital-wallet-opal.vercel.app", 
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT','PATCH','DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+
 app.use(cookieParser());
 
 app.use("/api", router )

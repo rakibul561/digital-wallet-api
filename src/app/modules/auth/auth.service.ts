@@ -41,7 +41,8 @@ import { generateToken } from "../../../utils/jwt";
    
     return {
       accessToken,
-      refreshToken
+      refreshToken,
+      userId: isUserExist._id
     }
  } 
 

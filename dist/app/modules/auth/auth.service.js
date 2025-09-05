@@ -16,6 +16,7 @@ exports.AuthServices = exports.loginUser = void 0;
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
 const user_model_1 = require("../user/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const env_1 = require("../../../config/env");
 const jwt_1 = require("../../../utils/jwt");
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,7 +34,12 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         role: isUserExist.role
     };
     const accessToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.JWT_ACCESS_SECRET, env_1.envVars.JWT_ACCESS_EXPIRES);
-    return accessToken;
+    const refreshToken = jsonwebtoken_1.default.sign(jwtPayload, env_1.envVars.JWT_REFRESH_SECRET, { expiresIn: env_1.envVars.JWT_REFRESH_EXPIRES });
+    return {
+        accessToken,
+        refreshToken,
+        userId: isUserExist._id
+    };
 });
 exports.loginUser = loginUser;
 exports.AuthServices = {

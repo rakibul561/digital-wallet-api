@@ -39,7 +39,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 // Controller
 const getSingleUsers = catchAsync(async (req: Request, res: Response) => {
-  const decodedToken = req.user!;
+  const decodedToken = req.user;
   const result = await UserService.SingleUser(decodedToken.userId);
 
   sendResponse(res, {

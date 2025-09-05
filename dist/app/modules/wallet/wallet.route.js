@@ -11,5 +11,4 @@ const user_interface_1 = require("../user/user.interface");
 const router = express_1.default.Router();
 router.get('/', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), wallet_controller_1.WalletController.getAllWallet);
 router.get('/me/:walletId', wallet_controller_1.WalletController.getSingleWallet);
-router.patch('/block/:walletId', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), wallet_controller_1.WalletController.updateWallets);
 exports.WalletRouters = router;

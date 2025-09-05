@@ -10,4 +10,5 @@ const validateRequest_1 = require("../../middleware/validateRequest");
 const user_validation_1 = require("../user/user.validation");
 const router = express_1.default.Router();
 router.post("/login", (0, validateRequest_1.validateRequest)(user_validation_1.userZodSchema.userLoginZodSchema), auth_controller_1.AuthController.userLogin);
+router.post("/logOut", auth_controller_1.AuthController.logout);
 exports.AuthRouters = router;

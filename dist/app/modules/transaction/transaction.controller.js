@@ -31,6 +31,7 @@ const addMoney = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, vo
 const withdraw = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user.userId;
     const amount = req.body.amount;
+    console.log("REQ BODY ===>", req.body);
     const result = yield transaction_service_1.TransactionService.withdrawDB(userId, amount);
     (0, sendRespone_1.sendResponse)(res, {
         success: true,

@@ -1,7 +1,8 @@
 import { envVars } from "../../../config/env";
+import { IStatus, IType } from "../../../type";
 import AppError from "../../errorHelpers/AppError";
 import { Wallet } from "../wallet/wallet.model";
-import { IUser } from "./user.interface";
+import { IUser, Status } from "./user.interface";
 import { User } from "./user.model";
 import  bcrypt  from 'bcrypt';
 
@@ -56,7 +57,7 @@ const SingleUser = async (userId: string) => {
 };
 
 
-const userUpdateProfile = async (userId:string , payload:string) =>{
+const userUpdateProfile = async (userId:string , payload:IType) =>{
 
   const {name,phone,oldPassword,newPassword} = payload ;
 
@@ -83,14 +84,14 @@ const userUpdateProfile = async (userId:string , payload:string) =>{
 }
 
 
-const updateUserStatus = async (userId: string, status: string) => {
+const updateUserStatus = async (userId: string, status:Status) => {
   const user = await User.findById(userId);
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  user.status = status; // ACTIVE / BLOCKED
+  user.status = status; 
   await user.save();
 
   return user;

@@ -41,7 +41,7 @@ export const checkAuth = (...authRoles: string[]) => async (req: Request, res: R
         }
 
     
-        (req as any).user = verifiedToken;
+        req.user = verifiedToken;
        
         next();
 
