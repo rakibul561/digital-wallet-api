@@ -7,20 +7,17 @@ import { catchAsync } from "../../../utils/catchAysnc";
 import { Wallet } from "../wallet/wallet.model";
 
 export const userLogin = async (req: Request, res: Response) => {
-   const data = await AuthServices.loginUser(req.body);
+  const data = await AuthServices.loginUser(req.body);
 
-  
   const userId = data?.user?._id || data?._id;
-
 
   const wallet = await Wallet.findOne({ userId });
 
  res.cookie("accessToken", data.accessToken, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", 
+  secure: process.env.NODE_ENV === "production", // লোকালে false, deploy এ true
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 });
-
 res.cookie("refreshToken", data.refreshToken, {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
@@ -30,40 +27,38 @@ res.cookie("refreshToken", data.refreshToken, {
 
   sendResponse(res, {
     success: true,
-    statusCode: 201,
+    statusCode: 200,
     message: "User Login Successfully",
     data: {
       ...data,
-      walletId: wallet?._id,  
+      walletId: wallet?._id,
     },
   });
 };
 
-
-
-
-const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-
+const logout = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     res.clearCookie("accessToken", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax"
-    })
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
     res.clearCookie("refreshToken", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax"
-    })
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
 
     sendResponse(res, {
-        success: true,
-        statusCode: 200,
-        message: "User Logged Out Successfully",
-        data: null,
-    })
-})
+      success: true,
+      statusCode: 200,
+      message: "User Logged Out Successfully",
+      data: null,
+    });
+  }
+);
 
 export const AuthController = {
   userLogin,
-  logout
+  logout,
 };
