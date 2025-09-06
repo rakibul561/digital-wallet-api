@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TransactionController = void 0;
+exports.TransactionController = exports.getAllAgentTransactions = void 0;
 const catchAysnc_1 = require("../../../utils/catchAysnc");
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const sendRespone_1 = require("../../../utils/sendRespone");
@@ -86,6 +86,16 @@ const getMyTransaction = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(vo
         data: result,
     });
 }));
+exports.getAllAgentTransactions = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.user.userId;
+    const result = yield transaction_service_1.TransactionService.getAgentTransactionsDb(userId);
+    (0, sendRespone_1.sendResponse)(res, {
+        success: true,
+        statusCode: http_status_codes_1.default.OK,
+        message: "Your transactions fetched successfully",
+        data: result,
+    });
+}));
 const getAllTransaction = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user.userId;
     const result = yield transaction_service_1.TransactionService.getAllTransactionDB(userId);
@@ -103,5 +113,6 @@ exports.TransactionController = {
     cashIn,
     cashOut,
     getMyTransaction,
-    getAllTransaction
+    getAllTransaction,
+    getAllAgentTransactions: exports.getAllAgentTransactions
 };

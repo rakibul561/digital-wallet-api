@@ -116,17 +116,21 @@ import { TransactionService } from "./transaction.service";
 });
 
 
-export const getAgentTransaction = catchAsync(
+export const getAllAgentTransactions = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = (req as any).user.userId; 
-    const result = await TransactionService.getAgentTransactionsDb(userId);
+     const userId = (req as any).user.userId;
+     console.log(userId)
 
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Your transactions fetched successfully",
-    data: result,
-  });
+    const result = await TransactionService.getAgentTransactionsDb(userId);
+    console.log(result)
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Your transactions fetched successfully",
+      data: result,
+    });
+    
 });
 
 
@@ -135,6 +139,7 @@ export const getAgentTransaction = catchAsync(
       const userId = (req as any).user.userId;
       
    const result = await TransactionService.getAllTransactionDB(userId);
+
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
@@ -154,5 +159,5 @@ export const getAgentTransaction = catchAsync(
     cashOut,
     getMyTransaction,
     getAllTransaction,
-    getAgentTransaction
+    getAllAgentTransactions
  }

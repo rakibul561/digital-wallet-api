@@ -3,6 +3,7 @@ import { Wallet } from "../wallet/wallet.model";
 import httpStatus from "http-status-codes";
 import { Transaction } from "./transaction.model";
 import { TransactionType } from "./transaction.interface";
+import mongoose from "mongoose";
 
 const addMoneyDB = async (userId: string, amount: number) => {
   const wallet = await Wallet.findOne({ userId });
@@ -184,14 +185,11 @@ export const getMyTransactionsDb = async (
 
 
 export const getAgentTransactionsDb = async (userId: string) => {
-  const query = {
-    $or: [{ userId }, { senderId: userId }, { receiverId: userId }],
-  };
-
-  const allTransaction = await Transaction.find(query).sort({ createdAt: -1 });
-
-  return allTransaction;
+      const transactions = await Transaction.find({ userId })
+    .sort({ createdAt: -1 }); // latest first
+  return transactions;
 };
+
 
 
 

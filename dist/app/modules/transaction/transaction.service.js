@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TransactionService = exports.getMyTransactionsDb = void 0;
+exports.TransactionService = exports.getAgentTransactionsDb = exports.getMyTransactionsDb = void 0;
 const AppError_1 = __importDefault(require("../../errorHelpers/AppError"));
 const wallet_model_1 = require("../wallet/wallet.model");
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
@@ -140,6 +140,18 @@ const getMyTransactionsDb = (userId, page, limit, sort) => __awaiter(void 0, voi
     };
 });
 exports.getMyTransactionsDb = getMyTransactionsDb;
+const getAgentTransactionsDb = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = {
+        $or: [
+            { userId: userId },
+            { senderId: userId },
+            { receiverId: userId }
+        ],
+    };
+    const allTransaction = yield transaction_model_1.Transaction.find(query).sort({ createdAt: -1 });
+    return allTransaction;
+});
+exports.getAgentTransactionsDb = getAgentTransactionsDb;
 const getAllTransactionDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const allTransaction = yield transaction_model_1.Transaction.find().populate("userId senderId receiverId agentId walletId");
     return allTransaction;
@@ -152,4 +164,5 @@ exports.TransactionService = {
     cashOutDB,
     getMyTransactionsDb: exports.getMyTransactionsDb,
     getAllTransactionDB,
+    getAgentTransactionsDb: exports.getAgentTransactionsDb
 };
