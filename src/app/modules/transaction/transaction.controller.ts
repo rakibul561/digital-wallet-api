@@ -29,7 +29,7 @@ import { TransactionService } from "./transaction.service";
 
    const userId = (req as any).user.userId;
    const amount = req.body.amount;
-   console.log("REQ BODY ===>", req.body);
+  
 
 
 
@@ -79,8 +79,7 @@ import { TransactionService } from "./transaction.service";
 
  const cashOut = catchAsync(async (req:Request, res:Response) =>{
   
-
-   const agentId = (req as any).user.agentId;
+  const agentId = (req as any).user.agentId;
    const {amount, userId} = req.body;
 
 
@@ -116,21 +115,18 @@ import { TransactionService } from "./transaction.service";
 });
 
 
-export const getAllAgentTransactions = catchAsync(
-  async (req: Request, res: Response) => {
-     const userId = (req as any).user.userId;
-     console.log(userId)
+const getAllAgentTransactions = catchAsync(async (req: Request, res: Response) => {
+ 
+  const agentId = (req as any).user.agentId;
 
-    const result = await TransactionService.getAgentTransactionsDb(userId);
-    console.log(result)
+  const result = await TransactionService.getAgentTransactionsDb(agentId);
 
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Your transactions fetched successfully",
-      data: result,
-    });
-    
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Agent transactions fetched successfully",
+    data: result,
+  });
 });
 
 

@@ -141,15 +141,9 @@ const getMyTransactionsDb = (userId, page, limit, sort) => __awaiter(void 0, voi
 });
 exports.getMyTransactionsDb = getMyTransactionsDb;
 const getAgentTransactionsDb = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = {
-        $or: [
-            { userId: userId },
-            { senderId: userId },
-            { receiverId: userId }
-        ],
-    };
-    const allTransaction = yield transaction_model_1.Transaction.find(query).sort({ createdAt: -1 });
-    return allTransaction;
+    const transactions = yield transaction_model_1.Transaction.find({ userId })
+        .sort({ createdAt: -1 }); // latest first
+    return transactions;
 });
 exports.getAgentTransactionsDb = getAgentTransactionsDb;
 const getAllTransactionDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {

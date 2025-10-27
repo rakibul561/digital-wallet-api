@@ -65,8 +65,6 @@ const sendMoneyDB = async (
   const receiverWallet = await Wallet.findOne({ userId: receiverId });
 
 
-  
-
   if (!senderWallet || !receiverWallet)
     throw new AppError(
       httpStatus.NOT_FOUND,
@@ -100,6 +98,7 @@ const sendMoneyDB = async (
 };
 
 const cashInDB = async (agentId: string, userId: string, amount: number) => {
+  
   const userWallet = await Wallet.findOne({ userId });
   if (!userWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
@@ -112,6 +111,7 @@ const cashInDB = async (agentId: string, userId: string, amount: number) => {
   if (userWallet.balance < amount) {
     throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance");
   }
+
 
   userWallet.balance = Number(userWallet.balance) + Number(amount);
 
@@ -129,6 +129,8 @@ const cashInDB = async (agentId: string, userId: string, amount: number) => {
 };
 
 const cashOutDB = async (agentId: string, userId: string, amount: number) => {
+
+  console.log("agent is is ", agentId)
   const userWallet = await Wallet.findOne({ userId });
   if (!userWallet) {
     throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
@@ -137,8 +139,6 @@ const cashOutDB = async (agentId: string, userId: string, amount: number) => {
   if (userWallet?.status === "BLOCKED") {
     throw new Error("Wallet is blocked. Cannot add money.");
   }
-
-
   userWallet.balance = Number(userWallet.balance) - Number(amount);
 
   await userWallet.save();
@@ -183,14 +183,14 @@ export const getMyTransactionsDb = async (
   };
 };
 
+export const getAgentTransactionsDb = async (agentId: string) => {
+  console.log("all agent transaction",agentId)
+  const transactions = await Transaction.find({ agentId: new mongoose.Types.ObjectId(agentId) })
+    .populate("userId senderId receiverId walletId")
+    .sort({ createdAt: -1 });
 
-export const getAgentTransactionsDb = async (userId: string) => {
-      const transactions = await Transaction.find({ userId })
-    .sort({ createdAt: -1 }); // latest first
   return transactions;
 };
-
-
 
 
 const getAllTransactionDB = async (userId: string) => {

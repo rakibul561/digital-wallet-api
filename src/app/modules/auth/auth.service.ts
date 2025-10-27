@@ -25,6 +25,7 @@ import { generateToken } from "../../../utils/jwt";
 
    const jwtPayload = {
      userId: isUserExist._id,
+     agentId: isUserExist._id, 
      email:payload.email,
      role: isUserExist.role
    }

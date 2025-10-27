@@ -88,7 +88,9 @@ const getMyTransaction = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(vo
 }));
 exports.getAllAgentTransactions = (0, catchAysnc_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.user.userId;
+    console.log(userId);
     const result = yield transaction_service_1.TransactionService.getAgentTransactionsDb(userId);
+    console.log(result);
     (0, sendRespone_1.sendResponse)(res, {
         success: true,
         statusCode: http_status_codes_1.default.OK,
