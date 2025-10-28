@@ -100,23 +100,34 @@ const sendMoneyDB = async (
 const cashInDB = async (agentId: string, userId: string, amount: number) => {
   
   const userWallet = await Wallet.findOne({ userId });
+  const agentWallet = await Wallet.findOne({ userId: agentId });
+
   if (!userWallet) {
-    throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
-  }
-   
- if (userWallet?.status === "BLOCKED") {
-    throw new Error("Wallet is blocked. Cannot add money.");
+    throw new AppError(httpStatus.NOT_FOUND, "User wallet not found");
   }
 
-  if (userWallet.balance < amount) {
-    throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance");
+  if (!agentWallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "Agent wallet not found");
   }
 
+  if (userWallet.status === "BLOCKED") {
+    throw new AppError(httpStatus.BAD_REQUEST, "User wallet is blocked. Cannot add money.");
+  }
 
+  // Check if agent has enough balance
+  if (agentWallet.balance < amount) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Agent has insufficient balance for cash in.");
+  }
+
+  // Update balances
   userWallet.balance = Number(userWallet.balance) + Number(amount);
+  agentWallet.balance = Number(agentWallet.balance) - Number(amount);
 
+  // Save changes
   await userWallet.save();
+  await agentWallet.save();
 
+  // Record transaction
   await Transaction.create({
     type: TransactionType.CASH_IN,
     amount,
@@ -125,24 +136,48 @@ const cashInDB = async (agentId: string, userId: string, amount: number) => {
     userId,
   });
 
-  return userWallet;
+  // Return response
+  return {
+   userWallet,
+   agentWallet
+  };
 };
 
+
+
 const cashOutDB = async (agentId: string, userId: string, amount: number) => {
-
-  console.log("agent is is ", agentId)
+  // Step 1: Find both wallets
   const userWallet = await Wallet.findOne({ userId });
+  const agentWallet = await Wallet.findOne({ userId: agentId });
+
+  console.log("database agent wallet:", agentWallet);
+
+  // Step 2: Validation checks
   if (!userWallet) {
-    throw new AppError(httpStatus.NOT_FOUND, "User Wallet not Found");
+    throw new AppError(httpStatus.NOT_FOUND, "User wallet not found");
   }
-  
-  if (userWallet?.status === "BLOCKED") {
-    throw new Error("Wallet is blocked. Cannot add money.");
+
+  if (!agentWallet) {
+    throw new AppError(httpStatus.NOT_FOUND, "Agent wallet not found");
   }
+
+  if (userWallet.status === "BLOCKED") {
+    throw new AppError(httpStatus.BAD_REQUEST, "User wallet is blocked. Cannot cash out.");
+  }
+
+  if (userWallet.balance < amount) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Insufficient balance for cash out.");
+  }
+
+  // Step 3: Update balances
   userWallet.balance = Number(userWallet.balance) - Number(amount);
+  agentWallet.balance = Number(agentWallet.balance) + Number(amount);
 
+  // Step 4: Save both wallets
   await userWallet.save();
+  await agentWallet.save();
 
+  // Step 5: Record transaction
   await Transaction.create({
     type: TransactionType.CASH_OUT,
     amount,
@@ -151,7 +186,10 @@ const cashOutDB = async (agentId: string, userId: string, amount: number) => {
     userId,
   });
 
-  return userWallet;
+  // Step 6: Return success response
+  return {
+   userWallet
+  };
 };
 
 
